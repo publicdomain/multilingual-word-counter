@@ -171,5 +171,23 @@ namespace MultilingualWordCounter
             // Show notify icon 
             this.mainNotifyIcon.Visible = true;
         }
+
+        /// <summary>
+        /// Restores the window back from system tray to the foreground.
+        /// </summary>
+        private void RestoreFromSystemTray()
+        {
+            // Make form visible again
+            this.Show();
+
+            // Return window back to normal
+            this.WindowState = FormWindowState.Normal;
+
+            // Restore in task bar
+            this.ShowInTaskbar = true;
+
+            // Hide system tray icon
+            this.mainNotifyIcon.Visible = false;
+        }
     }
 }
