@@ -8,7 +8,7 @@ namespace MultilingualWordCounter
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Drawing;
+    using System.IO;
     using System.Windows.Forms;
 
     /// <summary>
@@ -23,6 +23,44 @@ namespace MultilingualWordCounter
         {
             // The InitializeComponent() call is required for Windows Forms designer support.
             this.InitializeComponent();
+
+            // Set languages file path
+            var languageFilePath = "Languages.txt";
+
+            // Check for languages file
+            if (!File.Exists(languageFilePath))
+            {
+                // Inform user
+                MessageBox.Show($"Missing \"{languageFilePath}\" file!", "Required", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // TODO Exit program [Perhaps using a more-immediate way]
+                this.Close();
+
+                // Halt flow
+                return;
+            }
+
+            // Load languages into list
+            var languageList = new List<string>(File.ReadAllLines(languageFilePath));
+
+            // Add to combo boxes
+            foreach (var language in languageList)
+            {
+                // Add to native combo box
+                this.nativeComboBox.Items.Add(language);
+
+                // Add to foreign combo box
+                this.foreignComboBox.Items.Add(language);
+            }
+
+            // Set English as native
+            this.nativeComboBox.SelectedItem = "English";
+
+            // Set Italian as foreign
+            this.foreignComboBox.SelectedItem = "Italian";
+
+            // Set speed to avarage
+            this.speedComboBox.SelectedItem = "Average";
         }
 
         /// <summary>
@@ -95,6 +133,26 @@ namespace MultilingualWordCounter
         /// <param name="sender">Sender object.</param>
         /// <param name="e">Event arguments.</param>
         private void OnOptionsToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            // TODO Add code
+        }
+
+        /// <summary>
+        /// Handles the show tool strip menu item click event.
+        /// </summary>
+        /// <param name="sender">Sender object.</param>
+        /// <param name="e">Event arguments.</param>
+        private void OnShowToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            // TODO Add code
+        }
+
+        /// <summary>
+        /// Handles the main form resize event.
+        /// </summary>
+        /// <param name="sender">Sender object.</param>
+        /// <param name="e">Event arguments.</param>
+        private void OnMainFormResize(object sender, EventArgs e)
         {
             // TODO Add code
         }
