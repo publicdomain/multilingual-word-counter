@@ -10,12 +10,18 @@ namespace MultilingualWordCounter
     using System.Diagnostics;
     using System.IO;
     using System.Windows.Forms;
+    using System.Xml.Serialization;
 
     /// <summary>
     /// Main form.
     /// </summary>
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// The settings data.
+        /// </summary>
+        private SettingsData settingsData = new SettingsData();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="T:MultilingualWordCounter.MainForm"/> class.
         /// </summary>
@@ -193,6 +199,22 @@ namespace MultilingualWordCounter
 
             // Hide system tray icon
             this.mainNotifyIcon.Visible = false;
+        }
+
+        /// <summary>
+        /// Saves the settings data.
+        /// </summary>
+        private void SaveSettingsData()
+        {
+            // Use stream writer
+            using (StreamWriter streamWriter = new StreamWriter("SettingsData.txt", false))
+            {
+                // Set xml serialzer
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(SettingsData));
+
+                // Serialize settings data
+                xmlSerializer.Serialize(streamWriter, this.settingsData);
+            }
         }
     }
 }
