@@ -156,5 +156,20 @@ namespace MultilingualWordCounter
         {
             // TODO Add code
         }
+
+        /// <summary>
+        /// Sends the program to the system tray.
+        /// </summary>
+        private void SendToSystemTray()
+        {
+            // Hide main form
+            this.Hide();
+
+            // Remove from task bar
+            this.ShowInTaskbar = false;
+
+            // Show notify icon 
+            this.mainNotifyIcon.Visible = true;
+        }
     }
 }
