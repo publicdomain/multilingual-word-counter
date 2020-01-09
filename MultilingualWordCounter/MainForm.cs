@@ -112,8 +112,12 @@ namespace MultilingualWordCounter
                 // Open registry key
                 using (RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
                 {
-                    // Add app value
-                    registryKey.SetValue("MultilingualWordCounter", $"\"{Application.ExecutablePath}\" /autostart");
+                    // Check for app value
+                    if (registryKey.GetValue(Application.ProductName) == null)
+                    {
+                        // Add app value
+                        registryKey.SetValue(Application.ProductName, $"\"{Application.ExecutablePath}\" /autostart");
+                    }
                 }
 
                 // Check run at startup tool strip menu item
@@ -131,7 +135,7 @@ namespace MultilingualWordCounter
         }
 
         /// <summary>
-        /// Handles the headquarters patreoncom tool strip menu item click event.
+        /// Handles the headquarters at patreon.com tool strip menu item click event.
         /// </summary>
         /// <param name="sender">Sender object.</param>
         /// <param name="e">Event arguments.</param>
@@ -142,7 +146,7 @@ namespace MultilingualWordCounter
         }
 
         /// <summary>
-        /// Handles the source code githubcom tool strip menu item click event.
+        /// Handles the source code at github.com tool strip menu item click event.
         /// </summary>
         /// <param name="sender">Sender object.</param>
         /// <param name="e">Event arguments.</param>
@@ -201,7 +205,8 @@ namespace MultilingualWordCounter
         /// <param name="e">Event arguments.</param>
         private void OnOptionsToolStripMenuItemDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            // TODO Add code
+            // Toggle run at startup check box
+            this.runAtStartupToolStripMenuItem.Checked = !this.runAtStartupToolStripMenuItem.Checked;
         }
 
         /// <summary>
