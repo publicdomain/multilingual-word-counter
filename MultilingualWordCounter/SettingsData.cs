@@ -22,6 +22,12 @@ namespace MultilingualWordCounter
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:MultilingualWordCounter.SettingsData"/> run at startup.
+        /// </summary>
+        /// <value><c>true</c> if run at startup; otherwise, <c>false</c>.</value>
+        public bool RunAtStartup { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the native language.
         /// </summary>
         /// <value>The native language.</value>

@@ -8,9 +8,13 @@ namespace MultilingualWordCounter
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Drawing;
     using System.IO;
+    using System.Linq;
+    using System.Reflection;
     using System.Windows.Forms;
     using System.Xml.Serialization;
+    using Microsoft.Win32;
 
     /// <summary>
     /// Main form.
@@ -23,12 +27,40 @@ namespace MultilingualWordCounter
         private SettingsData settingsData = new SettingsData();
 
         /// <summary>
+        /// The assembly version.
+        /// </summary>
+        private Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
+        /// <summary>
+        /// The semantic version.
+        /// </summary>
+        private string semanticVersion = string.Empty;
+
+        /// <summary>
+        /// The associated icon.
+        /// </summary>
+        private Icon associatedIcon = null;
+
+        /// <summary>
+        /// The friendly name of the program.
+        /// </summary>
+        private string friendlyName = "Multilingual Word Counter";
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:MultilingualWordCounter.MainForm"/> class.
         /// </summary>
         public MainForm()
         {
             // The InitializeComponent() call is required for Windows Forms designer support.
             this.InitializeComponent();
+
+            // Set notify icon (utilize current one)
+            this.mainNotifyIcon.Icon = this.Icon;
+
+            // Set semantic version
+            this.semanticVersion = this.assemblyVersion.Major + "." + this.assemblyVersion.Minor + "." + this.assemblyVersion.Build;
+
+            /* Process languages */
 
             // Set languages file path
             var languageFilePath = "Languages.txt";
@@ -59,14 +91,17 @@ namespace MultilingualWordCounter
                 this.foreignComboBox.Items.Add(language);
             }
 
-            // Set English as native
-            this.nativeComboBox.SelectedItem = "English";
+            /* Process settings */
 
-            // Set Italian as foreign
-            this.foreignComboBox.SelectedItem = "Italian";
+            // Set settings file path
+            var settingsFilePath = "SettingsData.txt";
 
-            // Set speed to avarage
-            this.speedComboBox.SelectedItem = "Average";
+            // Check for settings data file
+            if (!File.Exists(settingsFilePath))
+            {
+                // Not present, assume first run and create it
+                this.SaveSettingsData();
+            }
         }
 
         /// <summary>
