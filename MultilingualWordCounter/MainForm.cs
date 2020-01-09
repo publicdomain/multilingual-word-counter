@@ -102,6 +102,32 @@ namespace MultilingualWordCounter
                 // Not present, assume first run and create it
                 this.SaveSettingsData();
             }
+
+            // Populate settings data
+            this.settingsData = this.LoadSettingsData();
+
+            // Check for run at startup
+            if (this.settingsData.RunAtStartup)
+            {
+                // Open registry key
+                using (RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+                {
+                    // Add app value
+                    registryKey.SetValue("MultilingualWordCounter", $"\"{Application.ExecutablePath}\" /autostart");
+                }
+
+                // Check run at startup tool strip menu item
+                this.runAtStartupToolStripMenuItem.Checked = this.settingsData.RunAtStartup;
+            }
+
+            // Set native language
+            this.nativeComboBox.SelectedItem = this.settingsData.NativeLanguage;
+
+            // Set foreign language
+            this.foreignComboBox.SelectedItem = this.settingsData.ForeignLanguage;
+
+            // Set speed 
+            this.speedComboBox.SelectedItem = this.settingsData.SpeechSpeed;
         }
 
         /// <summary>
