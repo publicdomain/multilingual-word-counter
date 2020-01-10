@@ -299,5 +299,16 @@ namespace MultilingualWordCounter
                 return xmlSerializer.Deserialize(fileStream) as SettingsData;
             }
         }
+
+        /// <summary>
+        /// Handles the minimize tool strip menu item click event.
+        /// </summary>
+        /// <param name="sender">Sender object.</param>
+        /// <param name="e">Event arguments.</param>
+        private void OnMinimizeToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            // Minimize program window
+            this.WindowState = FormWindowState.Minimized;
+        }
     }
 }
