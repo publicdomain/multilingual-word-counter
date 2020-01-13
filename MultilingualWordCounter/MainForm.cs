@@ -106,24 +106,6 @@ namespace MultilingualWordCounter
             // Populate settings data
             this.settingsData = this.LoadSettingsData();
 
-            // Check for run at startup
-            if (this.settingsData.RunAtStartup)
-            {
-                // Open registry key
-                using (RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
-                {
-                    // Check for app value
-                    if (registryKey.GetValue(Application.ProductName) == null)
-                    {
-                        // Add app value
-                        registryKey.SetValue(Application.ProductName, $"\"{Application.ExecutablePath}\" /autostart");
-                    }
-                }
-
-                // Check run at startup tool strip menu item
-                this.runAtStartupToolStripMenuItem.Checked = this.settingsData.RunAtStartup;
-            }
-
             // Set native language
             this.nativeComboBox.SelectedItem = this.settingsData.NativeLanguage;
 
@@ -132,6 +114,38 @@ namespace MultilingualWordCounter
 
             // Set speed 
             this.speedComboBox.SelectedItem = this.settingsData.SpeechSpeed;
+
+            // Act upon current run at startup state
+            this.ProcessRunAtStartup();
+
+            // Hide from view
+            this.SendToSystemTray();
+        }
+
+        /// <summary>
+        /// Processes the run at startup action.
+        /// </summary>
+        private void ProcessRunAtStartup()
+        {
+            // Open registry key
+            using (RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+            {
+                // Check for run at startup in settings data
+                if (this.settingsData.RunAtStartup)
+                {
+                    // Check for app value
+                    if (registryKey.GetValue(Application.ProductName) == null)
+                    {
+                        // Add app value
+                        registryKey.SetValue(Application.ProductName, $"\"{Application.ExecutablePath}\" /autostart");
+                    }
+                }
+                else
+                {
+                    // Erase app value
+                    registryKey.DeleteValue(Application.ProductName, false);
+                }
+            }
         }
 
         /// <summary>
