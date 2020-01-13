@@ -115,17 +115,20 @@ namespace MultilingualWordCounter
             // Set speed 
             this.speedComboBox.SelectedItem = this.settingsData.SpeechSpeed;
 
-            // Act upon current run at startup state
-            this.ProcessRunAtStartup();
+            // Set registry entry based on settings data
+            this.ProcessRunAtStartupRegistry();
+
+            // Set run at startup tool strip menu item check state
+            this.runAtStartupToolStripMenuItem.Checked = this.settingsData.RunAtStartup;
 
             // Hide from view
             this.SendToSystemTray();
         }
 
         /// <summary>
-        /// Processes the run at startup action.
+        /// Processes the run at startup registry action.
         /// </summary>
-        private void ProcessRunAtStartup()
+        private void ProcessRunAtStartupRegistry()
         {
             // Open registry key
             using (RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
@@ -324,6 +327,29 @@ namespace MultilingualWordCounter
         {
             // Minimize program window
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        /// <summary>
+        /// Handles the main form form closing event.
+        /// </summary>
+        /// <param name="sender">Sender object.</param>
+        /// <param name="e">Event arguments.</param>
+        private void OnMainFormFormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Set run at startup
+            this.settingsData.RunAtStartup = this.runAtStartupToolStripMenuItem.Checked;
+
+            // Set native language
+            this.settingsData.NativeLanguage = this.nativeComboBox.SelectedItem.ToString();
+
+            // Set foreign language
+            this.settingsData.ForeignLanguage = this.foreignComboBox.SelectedItem.ToString();
+
+            // Set speech speed
+            this.settingsData.SpeechSpeed = this.speedComboBox.SelectedItem.ToString();
+
+            // Save settings data to disk
+            this.SaveSettingsData();
         }
     }
 }
