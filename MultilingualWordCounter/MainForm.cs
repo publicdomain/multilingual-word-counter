@@ -109,6 +109,24 @@ namespace MultilingualWordCounter
             // Populate settings data
             this.settingsData = this.LoadSettingsData();
 
+            // Set registry entry based on settings data
+            this.ProcessRunAtStartupRegistry();
+
+            // Set gui values
+            this.SetGuiValuesFromSettingsData();
+
+            // Set run at startup tool strip menu item check state
+            this.runAtStartupToolStripMenuItem.Checked = this.settingsData.RunAtStartup;
+
+            // Hide from view
+            this.SendToSystemTray();
+        }
+
+        /// <summary>
+        /// Sets the GUI values from settings data.
+        /// </summary>
+        private void SetGuiValuesFromSettingsData()
+        {
             // Set native language
             this.nativeComboBox.SelectedItem = this.settingsData.NativeLanguage;
 
@@ -117,15 +135,6 @@ namespace MultilingualWordCounter
 
             // Set speed 
             this.speedComboBox.SelectedItem = this.settingsData.SpeechSpeed;
-
-            // Set registry entry based on settings data
-            this.ProcessRunAtStartupRegistry();
-
-            // Set run at startup tool strip menu item check state
-            this.runAtStartupToolStripMenuItem.Checked = this.settingsData.RunAtStartup;
-
-            // Hide from view
-            this.SendToSystemTray();
         }
 
         /// <summary>
