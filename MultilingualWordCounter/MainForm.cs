@@ -213,7 +213,14 @@ namespace MultilingualWordCounter
         /// <param name="e">Event arguments.</param>
         private void OnNewToolStripMenuItemClick(object sender, EventArgs e)
         {
-            // TODO Add code
+            // Recreate initial settings data
+            this.settingsData = new SettingsData();
+
+            // Save settings data to disk
+            this.SaveSettingsData();
+
+            // Set default GUI values
+            this.SetGuiValuesFromSettingsData();
         }
 
         /// <summary>
