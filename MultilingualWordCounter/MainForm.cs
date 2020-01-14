@@ -354,5 +354,20 @@ namespace MultilingualWordCounter
             // Save settings data to disk
             this.SaveSettingsData();
         }
+
+        /// <summary>
+        /// Handles the main notify icon mouse click event.
+        /// </summary>
+        /// <param name="sender">Sender object.</param>
+        /// <param name="e">Mouse event arguments.</param>
+        private void OnMainNotifyIconMouseClick(object sender, MouseEventArgs e)
+        {
+            // Check for left click
+            if (e.Button == MouseButtons.Left)
+            {
+                // Restore window 
+                this.RestoreFromSystemTray();
+            }
+        }
     }
 }
