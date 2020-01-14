@@ -101,6 +101,9 @@ namespace MultilingualWordCounter
             {
                 // Not present, assume first run and create it
                 this.SaveSettingsData();
+
+                // Inform user
+                MessageBox.Show($"Created \"{settingsFilePath}\" file.{Environment.NewLine}Program icon will appear on system tray.", "First run", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             // Populate settings data
