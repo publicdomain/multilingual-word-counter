@@ -12,6 +12,7 @@ namespace MultilingualWordCounter
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using System.Windows.Forms;
     using System.Xml.Serialization;
     using Microsoft.Win32;
@@ -21,6 +22,11 @@ namespace MultilingualWordCounter
     /// </summary>
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// The clipboard update windows message.
+        /// </summary>
+        private const int WmClipboardUpdate = 0x031D;
+
         /// <summary>
         /// The settings data.
         /// </summary>
@@ -47,6 +53,11 @@ namespace MultilingualWordCounter
         private string friendlyName = "Multilingual Word Counter";
 
         /// <summary>
+        /// The last clipboard text.
+        /// </summary>
+        private string lastClipboardText = String.Empty;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:MultilingualWordCounter.MainForm"/> class.
         /// </summary>
         public MainForm()
@@ -71,7 +82,7 @@ namespace MultilingualWordCounter
                 // Inform user
                 MessageBox.Show($"Missing \"{languageFilePath}\" file!", "Required", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                // TODO Exit program [Perhaps using a more-immediate way]
+                // Exit program
                 this.Close();
 
                 // Halt flow
@@ -118,9 +129,54 @@ namespace MultilingualWordCounter
             // Set run at startup tool strip menu item check state
             this.runAtStartupToolStripMenuItem.Checked = this.settingsData.RunAtStartup;
 
-            // Hide from view
+            // Hide to system tray
             this.SendToSystemTray();
+
+            // Add clipboard listener
+            AddClipboardFormatListener(this.Handle);
         }
+
+
+        /// <summary>
+        /// The Window procedure.
+        /// </summary>
+        /// <param name="m">The message.</param>
+        protected override void WndProc(ref Message m)
+        {
+            // Test incoming message
+            switch (m.Msg)
+            {
+                // Check for clipboard update
+                case WmClipboardUpdate:
+
+                    // Check for copied text
+                    if (Clipboard.ContainsText())
+                    {
+                        // TODO Place word count in status label, using Clipboard.GetText();
+                    }
+
+                    // Halt flow
+                    break;
+
+                // Continue processing
+                default:
+
+                    // Pass message
+                    base.WndProc(ref m);
+
+                    // Halt flow
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Adds the clipboard format listener.
+        /// </summary>
+        /// <returns><c>true</c>, if clipboard format listener was added, <c>false</c> otherwise.</returns>
+        /// <param name="hwnd">The handle.</param>
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool AddClipboardFormatListener(IntPtr hwnd);
 
         /// <summary>
         /// Sets the GUI values from settings data.
