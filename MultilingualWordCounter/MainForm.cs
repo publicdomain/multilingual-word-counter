@@ -13,6 +13,7 @@ namespace MultilingualWordCounter
     using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
+    using System.Text.RegularExpressions;
     using System.Windows.Forms;
     using System.Xml.Serialization;
     using Microsoft.Win32;
@@ -22,11 +23,6 @@ namespace MultilingualWordCounter
     /// </summary>
     public partial class MainForm : Form
     {
-        /// <summary>
-        /// The clipboard update windows message.
-        /// </summary>
-        private const int WmClipboardUpdate = 0x031D;
-
         /// <summary>
         /// The settings data.
         /// </summary>
@@ -130,53 +126,19 @@ namespace MultilingualWordCounter
             this.runAtStartupToolStripMenuItem.Checked = this.settingsData.RunAtStartup;
 
             // Hide to system tray
-            this.SendToSystemTray();
-
-            // Add clipboard listener
-            AddClipboardFormatListener(this.Handle);
+            //this.SendToSystemTray();
         }
 
-
         /// <summary>
-        /// The Window procedure.
+        /// Counts the words.
         /// </summary>
-        /// <param name="m">The message.</param>
-        protected override void WndProc(ref Message m)
+        /// <returns>The counted words.</returns>
+        /// <param name="text">The input text.</param>
+        private int CountWords(string text)
         {
-            // Test incoming message
-            switch (m.Msg)
-            {
-                // Check for clipboard update
-                case WmClipboardUpdate:
-
-                    // Check for copied text
-                    if (Clipboard.ContainsText())
-                    {
-                        // TODO Place word count in status label, using Clipboard.GetText();
-                    }
-
-                    // Halt flow
-                    break;
-
-                // Continue processing
-                default:
-
-                    // Pass message
-                    base.WndProc(ref m);
-
-                    // Halt flow
-                    break;
-            }
+            // Return the word count
+            return Regex.Matches(text, @"[A-Za-z0-9]+").Count;
         }
-
-        /// <summary>
-        /// Adds the clipboard format listener.
-        /// </summary>
-        /// <returns><c>true</c>, if clipboard format listener was added, <c>false</c> otherwise.</returns>
-        /// <param name="hwnd">The handle.</param>
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool AddClipboardFormatListener(IntPtr hwnd);
 
         /// <summary>
         /// Sets the GUI values from settings data.
