@@ -203,8 +203,16 @@ namespace MultilingualWordCounter
                         // Halt flow
                         break;
 
-                    // CTRL+F7
+                    // CTRL+SHIFT+F6
                     case 2:
+                        // Show program window
+                        this.RestoreFromSystemTray();
+
+                        // Halt flow
+                        break;
+
+                    // CTRL+F7
+                    case 3:
                         // Show message
                         this.messageForm.ShowMessage(this.GetSpeechTimeSpan(Clipboard.GetText(), this.nativeComboBox.SelectedItem.ToString(), this.languageSpeedWpmDictionary[this.nativeComboBox.SelectedItem.ToString()][this.speedComboBox.SelectedItem.ToString()]).ToString(@"hh\:mm\:ss"), "Native speech time");
 
@@ -212,9 +220,33 @@ namespace MultilingualWordCounter
                         break;
 
                     // CTRL+SHIFT+F7
-                    case 3:
+                    case 4:
                         // Show message
                         this.messageForm.ShowMessage(this.GetSpeechTimeSpan(Clipboard.GetText(), this.foreignComboBox.SelectedItem.ToString(), this.languageSpeedWpmDictionary[this.foreignComboBox.SelectedItem.ToString()][this.speedComboBox.SelectedItem.ToString()]).ToString(@"hh\:mm\:ss"), "Foreign speech time");
+
+                        // Halt flow
+                        break;
+
+                    // CTRL+F8
+                    case 5:
+                        // Check for minimum speed
+                        if (this.speedComboBox.SelectedIndex > 0)
+                        {
+                            // Lower speed
+                            this.speedComboBox.SelectedIndex--;
+                        }
+
+                        // Halt flow
+                        break;
+
+                    // CTRL+SHIFT+F8
+                    case 6:
+                        // Check for maximum speed
+                        if (this.speedComboBox.SelectedIndex < this.speedComboBox.Items.Count - 1)
+                        {
+                            // Increment speed
+                            this.speedComboBox.SelectedIndex++;
+                        }
 
                         // Halt flow
                         break;
@@ -498,8 +530,11 @@ namespace MultilingualWordCounter
         {
             // Register hotkeys
             RegisterHotKey(this.Handle, 1, MODCONTROL, (int)Keys.F6); // Count words
-            RegisterHotKey(this.Handle, 2, MODCONTROL, (int)Keys.F7); // Native speech time
-            RegisterHotKey(this.Handle, 3, MODCONTROL + MODSHIFT, (int)Keys.F7); // Foreign speech time
+            RegisterHotKey(this.Handle, 2, MODCONTROL + MODSHIFT, (int)Keys.F6); // Show program window
+            RegisterHotKey(this.Handle, 3, MODCONTROL, (int)Keys.F7); // Native speech time
+            RegisterHotKey(this.Handle, 4, MODCONTROL + MODSHIFT, (int)Keys.F7); // Foreign speech time
+            RegisterHotKey(this.Handle, 5, MODCONTROL, (int)Keys.F8); // Decrease speed
+            RegisterHotKey(this.Handle, 6, MODCONTROL + MODSHIFT, (int)Keys.F8); // Increase speed
         }
 
         /// <summary>
@@ -528,6 +563,9 @@ namespace MultilingualWordCounter
             UnregisterHotKey(this.Handle, 1);
             UnregisterHotKey(this.Handle, 2);
             UnregisterHotKey(this.Handle, 3);
+            UnregisterHotKey(this.Handle, 4);
+            UnregisterHotKey(this.Handle, 5);
+            UnregisterHotKey(this.Handle, 6);
         }
 
         /// <summary>
