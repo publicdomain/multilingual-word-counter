@@ -198,7 +198,7 @@ namespace MultilingualWordCounter
                     // CTRL+F6
                     case 1:
                         // Show message
-                        this.messageForm.ShowMessage(this.CountWords(Clipboard.GetText()).ToString(), "Clipboard word count");
+                        this.messageForm.ShowMessage($"{this.CountWords(Clipboard.GetText())} copied words", "Clipboard word count");
 
                         // Halt flow
                         break;
@@ -214,7 +214,7 @@ namespace MultilingualWordCounter
                     // CTRL+F7
                     case 3:
                         // Show message
-                        this.messageForm.ShowMessage(this.GetSpeechTimeSpan(Clipboard.GetText(), this.nativeComboBox.SelectedItem.ToString(), this.languageSpeedWpmDictionary[this.nativeComboBox.SelectedItem.ToString()][this.speedComboBox.SelectedItem.ToString()]).ToString(@"hh\:mm\:ss"), "Native speech time");
+                        this.messageForm.ShowMessage(this.TimeSpanToHumanReadable(this.GetSpeechTimeSpan(Clipboard.GetText(), this.nativeComboBox.SelectedItem.ToString(), this.languageSpeedWpmDictionary[this.nativeComboBox.SelectedItem.ToString()][this.speedComboBox.SelectedItem.ToString()])) + $" ({this.speedComboBox.SelectedItem.ToString()})", "Native speech time");
 
                         // Halt flow
                         break;
@@ -222,7 +222,7 @@ namespace MultilingualWordCounter
                     // CTRL+SHIFT+F7
                     case 4:
                         // Show message
-                        this.messageForm.ShowMessage(this.GetSpeechTimeSpan(Clipboard.GetText(), this.foreignComboBox.SelectedItem.ToString(), this.languageSpeedWpmDictionary[this.foreignComboBox.SelectedItem.ToString()][this.speedComboBox.SelectedItem.ToString()]).ToString(@"hh\:mm\:ss"), "Foreign speech time");
+                        this.messageForm.ShowMessage(this.TimeSpanToHumanReadable(this.GetSpeechTimeSpan(Clipboard.GetText(), this.foreignComboBox.SelectedItem.ToString(), this.languageSpeedWpmDictionary[this.foreignComboBox.SelectedItem.ToString()][this.speedComboBox.SelectedItem.ToString()])) + $" ({this.speedComboBox.SelectedItem.ToString()})", "Foreign speech time");
 
                         // Halt flow
                         break;
@@ -299,6 +299,47 @@ namespace MultilingualWordCounter
         {
             // Return the timespan
             return TimeSpan.FromSeconds((this.CountWords(text) * 60) / wordsPerMinute);
+        }
+
+        /// <summary>
+        /// Gets the human readable representation of passed time span.
+        /// </summary>
+        /// <returns>The human readable representation of passed time span..</returns>
+        /// <param name="timeSpan">Time span.</param>
+        private string TimeSpanToHumanReadable(TimeSpan timeSpan)
+        {
+            // Pieceslist
+            var pieceList = new List<string>();
+
+            // Check for days
+            if (timeSpan.Days > 0)
+            {
+                // Add days
+                pieceList.Add($"{timeSpan.Days} day{(timeSpan.Days > 1 ? "s" : string.Empty)}");
+            }
+
+            // Check for hours
+            if (timeSpan.Hours > 0)
+            {
+                // Add hours
+                pieceList.Add($"{timeSpan.Hours} hour{(timeSpan.Hours > 1 ? "s" : string.Empty)}");
+            }
+
+            // Check for minutes
+            if (timeSpan.Minutes > 0)
+            {
+                // Add minutes
+                pieceList.Add($"{timeSpan.Minutes} minute{(timeSpan.Minutes > 1 ? "s" : string.Empty)}");
+            }
+
+            // Check for seconds
+            if (timeSpan.Seconds > 0)
+            {
+                // Add seconds
+                pieceList.Add($"{timeSpan.Seconds} second{(timeSpan.Seconds > 1 ? "s" : string.Empty)}");
+            }
+
+            return string.Join(", ", pieceList);
         }
 
         /// <summary>
