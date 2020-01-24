@@ -293,8 +293,8 @@ namespace MultilingualWordCounter
         	// mainToolStripStatusLabel
         	// 
         	this.mainToolStripStatusLabel.Name = "mainToolStripStatusLabel";
-        	this.mainToolStripStatusLabel.Size = new System.Drawing.Size(169, 17);
-        	this.mainToolStripStatusLabel.Text = "Monitoring clipboard for text...";
+        	this.mainToolStripStatusLabel.Size = new System.Drawing.Size(208, 17);
+        	this.mainToolStripStatusLabel.Text = "Monitoring for system-wide hotkeys...";
         	// 
         	// notifyContextMenuStrip
         	// 
@@ -339,8 +339,9 @@ namespace MultilingualWordCounter
         	this.Name = "MainForm";
         	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         	this.Text = "Multilingual Word Counter";
-        	this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
         	this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnMainFormFormClosing);
+        	this.Load += new System.EventHandler(this.OnMainFormLoad);
+        	this.Shown += new System.EventHandler(this.OnMainFormShown);
         	this.Resize += new System.EventHandler(this.OnMainFormResize);
         	this.mainTableLayoutPanel.ResumeLayout(false);
         	this.mainMenuStrip.ResumeLayout(false);
@@ -378,6 +379,6 @@ namespace MultilingualWordCounter
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;      
     }
 }

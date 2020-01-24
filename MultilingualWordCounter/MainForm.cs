@@ -2,6 +2,7 @@
 //     CC0 1.0 Universal (CC0 1.0) - Public Domain Dedication
 //     https://creativecommons.org/publicdomain/zero/1.0/legalcode
 // </copyright>
+
 namespace MultilingualWordCounter
 {
     // Directives
@@ -10,7 +11,6 @@ namespace MultilingualWordCounter
     using System.Diagnostics;
     using System.Drawing;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Text.RegularExpressions;
@@ -23,6 +23,26 @@ namespace MultilingualWordCounter
     /// </summary>
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// The mod control.
+        /// </summary>
+        private const int MODCONTROL = 0x0002; // Changed from MOD_CONTROL for StyleCop
+
+        /// <summary>
+        /// The mod shift.
+        /// </summary>
+        private const int MODSHIFT = 0x0004; // Changed from MOD_SHIFT for StyleCop
+
+        /// <summary>
+        /// The wm hotkey.
+        /// </summary>
+        private const int WMHOTKEY = 0x0312; // Changed from  for StyleCop
+
+        /// <summary>
+        /// The last clipboard text.
+        /// </summary>
+        private string lastClipboardText = string.Empty;
+
         /// <summary>
         /// The settings data.
         /// </summary>
@@ -49,9 +69,14 @@ namespace MultilingualWordCounter
         private string friendlyName = "Multilingual Word Counter";
 
         /// <summary>
-        /// The last clipboard text.
+        /// The language speed wpm dictionary.
         /// </summary>
-        private string lastClipboardText = String.Empty;
+        private Dictionary<string, Dictionary<string, int>> languageSpeedWpmDictionary = new Dictionary<string, Dictionary<string, int>>();
+
+        /// <summary>
+        /// The message form.
+        /// </summary>
+        private MessageForm messageForm = new MessageForm();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:MultilingualWordCounter.MainForm"/> class.
@@ -61,7 +86,10 @@ namespace MultilingualWordCounter
             // The InitializeComponent() call is required for Windows Forms designer support.
             this.InitializeComponent();
 
-            // Set notify icon (utilize current one)
+            // Set message form icon
+            this.messageForm.Icon = this.Icon;
+
+            // Set notify icon
             this.mainNotifyIcon.Icon = this.Icon;
 
             // Set semantic version
@@ -89,13 +117,42 @@ namespace MultilingualWordCounter
             var languageList = new List<string>(File.ReadAllLines(languageFilePath));
 
             // Add to combo boxes
-            foreach (var language in languageList)
+            foreach (var languageLine in languageList)
             {
+                // Set language info
+                List<string> languageInfo = new List<string>(languageLine.Split(new char[] { ',' }, 4)); // language, slow, average, fast
+
+                // Check information is complete
+                if (languageInfo.Count < 4)
+                {
+                    // Skip incomplete language info
+                    continue;
+                }
+
+                // Set language name
+                string languageName = languageInfo[0];
+
+                /* Language */
+
                 // Add to native combo box
-                this.nativeComboBox.Items.Add(language);
+                this.nativeComboBox.Items.Add(languageName);
 
                 // Add to foreign combo box
-                this.foreignComboBox.Items.Add(language);
+                this.foreignComboBox.Items.Add(languageName);
+
+                /* Speed */
+
+                // Add language to words per minute dictionary
+                this.languageSpeedWpmDictionary.Add(languageName, new Dictionary<string, int>());
+
+                // Slow
+                this.languageSpeedWpmDictionary[languageName].Add("Slow", int.Parse(languageInfo[1]));
+
+                // Average
+                this.languageSpeedWpmDictionary[languageName].Add("Average", int.Parse(languageInfo[2]));
+
+                // Fast
+                this.languageSpeedWpmDictionary[languageName].Add("Fast", int.Parse(languageInfo[3]));
             }
 
             /* Process settings */
@@ -124,10 +181,69 @@ namespace MultilingualWordCounter
 
             // Set run at startup tool strip menu item check state
             this.runAtStartupToolStripMenuItem.Checked = this.settingsData.RunAtStartup;
-
-            // Hide to system tray
-            //this.SendToSystemTray();
         }
+
+        /// <summary>
+        /// Windows procedure.
+        /// </summary>
+        /// <param name="m">The message</param>
+        protected override void WndProc(ref Message m)
+        {
+            // Chedk for hotkey message
+            if (m.Msg == WMHOTKEY)
+            {
+                // Act on hotkey
+                switch ((int)m.WParam)
+                {
+                    // CTRL+F6
+                    case 1:
+                        // Show message
+                        this.messageForm.ShowMessage(this.CountWords(Clipboard.GetText()).ToString(), "Clipboard word count");
+
+                        // Halt flow
+                        break;
+
+                    // CTRL+F7
+                    case 2:
+                        // Show message
+                        this.messageForm.ShowMessage(this.GetSpeechTimeSpan(Clipboard.GetText(), this.nativeComboBox.SelectedItem.ToString(), this.languageSpeedWpmDictionary[this.nativeComboBox.SelectedItem.ToString()][this.speedComboBox.SelectedItem.ToString()]).ToString(@"hh\:mm\:ss"), "Native speech time");
+
+                        // Halt flow
+                        break;
+
+                    // CTRL+SHIFT+F7
+                    case 3:
+                        // Show message
+                        this.messageForm.ShowMessage(this.GetSpeechTimeSpan(Clipboard.GetText(), this.foreignComboBox.SelectedItem.ToString(), this.languageSpeedWpmDictionary[this.foreignComboBox.SelectedItem.ToString()][this.speedComboBox.SelectedItem.ToString()]).ToString(@"hh\:mm\:ss"), "Foreign speech time");
+
+                        // Halt flow
+                        break;
+                }
+            }
+
+            // Forward message
+            base.WndProc(ref m);
+        }
+
+        /// <summary>
+        /// Registers the hot key.
+        /// </summary>
+        /// <returns><c>true</c>, if hot key was registered, <c>false</c> otherwise.</returns>
+        /// <param name="handle">The window handle.</param>
+        /// <param name="id">The identifier.</param>
+        /// <param name="modifiers">The modifiers.</param>
+        /// <param name="vk">The virtual key.</param>
+        [DllImport("user32.dll")]
+        private static extern bool RegisterHotKey(IntPtr handle, int id, int modifiers, int vk);
+
+        /// <summary>
+        /// Unregisters the hot key.
+        /// </summary>
+        /// <returns><c>true</c>, if the hot key was unregistered, <c>false</c> otherwise.</returns>
+        /// <param name="handle">The window handle.</param>
+        /// <param name="id">The identifier.</param>
+        [DllImport("user32.dll")]
+        private static extern bool UnregisterHotKey(IntPtr handle, int id);
 
         /// <summary>
         /// Counts the words.
@@ -138,6 +254,19 @@ namespace MultilingualWordCounter
         {
             // Return the word count
             return Regex.Matches(text, @"[A-Za-z0-9]+").Count;
+        }
+
+        /// <summary>
+        /// Gets the speech time span.
+        /// </summary>
+        /// <returns>The speech time span.</returns>
+        /// <param name="text">The text.</param>
+        /// <param name="language">The language.</param>
+        /// <param name="wordsPerMinute">Words per minute.</param>
+        private TimeSpan GetSpeechTimeSpan(string text, string language, int wordsPerMinute)
+        {
+            // Return the timespan
+            return TimeSpan.FromSeconds((this.CountWords(text) * 60) / wordsPerMinute);
         }
 
         /// <summary>
@@ -297,9 +426,6 @@ namespace MultilingualWordCounter
             // Hide main form
             this.Hide();
 
-            // Remove from task bar
-            this.ShowInTaskbar = false;
-
             // Show notify icon 
             this.mainNotifyIcon.Visible = true;
         }
@@ -314,9 +440,6 @@ namespace MultilingualWordCounter
 
             // Return window back to normal
             this.WindowState = FormWindowState.Normal;
-
-            // Restore in task bar
-            this.ShowInTaskbar = true;
 
             // Hide system tray icon
             this.mainNotifyIcon.Visible = false;
@@ -341,7 +464,7 @@ namespace MultilingualWordCounter
         /// <summary>
         /// Loads the settings data.
         /// </summary>
-        /// <returns>The settings data.</returns>
+        /// <returns>The settings data.</returns>ing
         private SettingsData LoadSettingsData()
         {
             // Use file stream
@@ -367,6 +490,19 @@ namespace MultilingualWordCounter
         }
 
         /// <summary>
+        /// Handles the main form load event.
+        /// </summary>
+        /// <param name="sender">Sender object.</param>
+        /// <param name="e">Event arguments.</param>
+        private void OnMainFormLoad(object sender, EventArgs e)
+        {
+            // Register hotkeys
+            RegisterHotKey(this.Handle, 1, MODCONTROL, (int)Keys.F6); // Count words
+            RegisterHotKey(this.Handle, 2, MODCONTROL, (int)Keys.F7); // Native speech time
+            RegisterHotKey(this.Handle, 3, MODCONTROL + MODSHIFT, (int)Keys.F7); // Foreign speech time
+        }
+
+        /// <summary>
         /// Handles the main form form closing event.
         /// </summary>
         /// <param name="sender">Sender object.</param>
@@ -387,6 +523,11 @@ namespace MultilingualWordCounter
 
             // Save settings data to disk
             this.SaveSettingsData();
+
+            // Unregister hotkeys
+            UnregisterHotKey(this.Handle, 1);
+            UnregisterHotKey(this.Handle, 2);
+            UnregisterHotKey(this.Handle, 3);
         }
 
         /// <summary>
@@ -402,6 +543,17 @@ namespace MultilingualWordCounter
                 // Restore window 
                 this.RestoreFromSystemTray();
             }
+        }
+
+        /// <summary>
+        /// Handles the main form shown event.
+        /// </summary>
+        /// <param name="sender">Sender object.</param>
+        /// <param name="e">Mouse event arguments.</param>
+        private void OnMainFormShown(object sender, EventArgs e)
+        {
+            // Minimize program window
+            this.WindowState = FormWindowState.Minimized;
         }
     }
 }

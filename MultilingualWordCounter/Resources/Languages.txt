@@ -1,6 +1,6 @@
 Mandarin
 Spanish
-English
+English,90,115,140
 Hindi
 Arabic
 Portuguese
@@ -12,7 +12,7 @@ German
 Javanese
 Wu
 Malay
-Telugu
+Telugua
 Vietnamese
 Korean
 French
@@ -20,7 +20,7 @@ Marathi
 Tamil
 Urdu
 Turkish
-Italian
+Italian,175,220,280
 Yue
 Thai
 Gujarati
