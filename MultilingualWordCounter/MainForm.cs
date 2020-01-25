@@ -308,6 +308,20 @@ namespace MultilingualWordCounter
         /// <param name="timeSpan">Time span.</param>
         private string TimeSpanToHumanReadable(TimeSpan timeSpan)
         {
+            // Check for zero length
+            if (timeSpan.TotalSeconds == 0)
+            {
+                // Halt flow
+                return "No words to process";
+            }
+
+            // Check for under-second length
+            if (timeSpan.TotalSeconds < 1)
+            {
+                // Halt flow
+                return "Less than 1 second";
+            }
+
             // Pieceslist
             var pieceList = new List<string>();
 
