@@ -466,7 +466,7 @@ namespace MultilingualWordCounter
             var aboutForm = new AboutForm(
                 $"About {this.friendlyName}",
                 $"{this.friendlyName} {this.semanticVersion}",
-                $"Made for: Stephen66515{Environment.NewLine}DonationCoder.com{Environment.NewLine}Week #03 @ January 2020",
+                $"Made for: Stephen66515{Environment.NewLine}DonationCoder.com{Environment.NewLine}Week #04 @ January 2020",
                 licenseText,
                 this.Icon.ToBitmap());
 
