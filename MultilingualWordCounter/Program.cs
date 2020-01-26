@@ -9,17 +9,44 @@ using System.Windows.Forms;
 
 namespace MultilingualWordCounter
 {
+    // Directives
+    using System.Threading;
+
     /// <summary>
     /// Class with program entry point.
     /// </summary>
     internal sealed class Program
     {
         /// <summary>
+        /// The multilingual word counter (MWC) mutex.
+        /// </summary>
+        private static Mutex mwcMutex;
+
+        /// <summary>
         /// Program entry point.
         /// </summary>
         [STAThread]
         private static void Main(string[] args)
         {
+            // Boolean flag for new instance
+            bool newInstance;
+
+            // Set mutex
+            mwcMutex = new Mutex(true, @"Global\" + "MultilingualWordCounter", out newInstance);
+
+            // Prevent it to be garbage-collected
+            GC.KeepAlive(mwcMutex);
+
+            // Check for former instance (if it's not new, it's an existing/previous one)
+            if (!newInstance)
+            {
+                // Advise user
+                MessageBox.Show("Only one instance of the program allowed.", "Previous instance detected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Halt program
+                return;
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());

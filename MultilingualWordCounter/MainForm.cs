@@ -80,6 +80,11 @@ namespace MultilingualWordCounter
         private MessageForm messageForm = new MessageForm();
 
         /// <summary>
+        /// The hotkeys message.
+        /// </summary>
+        private string hotkeyMessage = $"Hotkeys:{Environment.NewLine}CTRL+F6 = Clipboard word count{Environment.NewLine}CTRL+SHIFT+F6 = Show program window{Environment.NewLine}CTRL+F7 = Native speech time{Environment.NewLine}CTRL+SHIFT+F7 = Foreign speech time{Environment.NewLine}CTRL+F8 = Decrease speed{Environment.NewLine}CTRL+SHIFT+F7 = Increase speed";
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:MultilingualWordCounter.MainForm"/> class.
         /// </summary>
         public MainForm()
@@ -168,7 +173,7 @@ namespace MultilingualWordCounter
                 this.SaveSettingsData();
 
                 // Inform user
-                MessageBox.Show($"Created \"{settingsFilePath}\" file.{Environment.NewLine}Program icon will appear on system tray.", "First run", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Created \"{settingsFilePath}\" file.{Environment.NewLine}Program icon will appear on system tray.{Environment.NewLine}{Environment.NewLine}{hotkeyMessage}", "First run", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             // Populate settings data
@@ -209,8 +214,6 @@ namespace MultilingualWordCounter
                         // Show program window
                         this.RestoreFromSystemTray();
 
-                        // 
-
                         // Halt flow
                         break;
 
@@ -235,7 +238,7 @@ namespace MultilingualWordCounter
                         // Check for minimum speed
                         if (this.speedComboBox.SelectedIndex > 0)
                         {
-                            // Lower speed
+                            // Decrease speed
                             this.speedComboBox.SelectedIndex--;
                         }
 
@@ -247,7 +250,7 @@ namespace MultilingualWordCounter
                         // Check for maximum speed
                         if (this.speedComboBox.SelectedIndex < this.speedComboBox.Items.Count - 1)
                         {
-                            // Increment speed
+                            // Increase speed
                             this.speedComboBox.SelectedIndex++;
                         }
 
@@ -572,8 +575,14 @@ namespace MultilingualWordCounter
             // Return window back to normal
             this.WindowState = FormWindowState.Normal;
 
+            // Make it topmost
+            this.TopMost = true;
+
             // Bring to the front of the Z-order
             this.BringToFront();
+
+            // Reset topmost
+            this.TopMost = false;
 
             // Hide system tray icon
             this.mainNotifyIcon.Visible = false;
