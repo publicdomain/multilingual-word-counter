@@ -66,6 +66,8 @@ namespace MultilingualWordCounter
         	this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.notifyExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.mainNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+        	this.hotkeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
         	this.mainTableLayoutPanel.SuspendLayout();
         	this.mainMenuStrip.SuspendLayout();
         	this.mainStatusStrip.SuspendLayout();
@@ -226,6 +228,8 @@ namespace MultilingualWordCounter
         	        	        	this.toolStripSeparator1,
         	        	        	this.originalThreadDonationCodercomToolStripMenuItem,
         	        	        	this.toolStripSeparator5,
+        	        	        	this.hotkeysToolStripMenuItem,
+        	        	        	this.toolStripSeparator2,
         	        	        	this.aboutToolStripMenuItem});
         	this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
         	this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -324,6 +328,18 @@ namespace MultilingualWordCounter
         	this.mainNotifyIcon.Text = "Click to show Multilingual Word Counter";
         	this.mainNotifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnMainNotifyIconMouseClick);
         	// 
+        	// hotkeysToolStripMenuItem
+        	// 
+        	this.hotkeysToolStripMenuItem.Name = "hotkeysToolStripMenuItem";
+        	this.hotkeysToolStripMenuItem.Size = new System.Drawing.Size(278, 22);
+        	this.hotkeysToolStripMenuItem.Text = "&Hotkeys";
+        	this.hotkeysToolStripMenuItem.Click += new System.EventHandler(this.OnHotkeysToolStripMenuItemClick);
+        	// 
+        	// toolStripSeparator2
+        	// 
+        	this.toolStripSeparator2.Name = "toolStripSeparator2";
+        	this.toolStripSeparator2.Size = new System.Drawing.Size(275, 6);
+        	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -352,6 +368,8 @@ namespace MultilingualWordCounter
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem hotkeysToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem minimizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runAtStartupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
