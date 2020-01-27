@@ -330,34 +330,34 @@ namespace MultilingualWordCounter
 
             // Pieceslist
             var pieceList = new List<string>();
-            /*
-                        // Check for days
-                        if (timeSpan.Days > 0)
-                        {
-                            // Add days
-                            pieceList.Add($"{timeSpan.Days} day{(timeSpan.Days > 1 ? "s" : string.Empty)}");
-                        }
 
-                        // Check for hours
-                        if (timeSpan.Hours > 0)
-                        {
-                            // Add hours
-                            pieceList.Add($"{timeSpan.Hours} hour{(timeSpan.Hours > 1 ? "s" : string.Empty)}");
-                        }
+            // Check for days
+            if (timeSpan.Days > 0)
+            {
+                // Add days
+                pieceList.Add($"{timeSpan.Days} day{(timeSpan.Days > 1 ? "s" : string.Empty)}");
+            }
 
-                        // Check for minutes
-                        if (timeSpan.Minutes > 0)
-                        {
-                            // Add minutes
-                            pieceList.Add($"{timeSpan.Minutes} minute{(timeSpan.Minutes > 1 ? "s" : string.Empty)}");
-                        }
+            // Check for hours
+            if (timeSpan.Hours > 0)
+            {
+                // Add hours
+                pieceList.Add($"{timeSpan.Hours} hour{(timeSpan.Hours > 1 ? "s" : string.Empty)}");
+            }
 
-                        // Check for seconds
-                        if (timeSpan.Seconds > 0)
-                        {
-                            // Add seconds
-                            pieceList.Add($"{timeSpan.Seconds} second{(timeSpan.Seconds > 1 ? "s" : string.Empty)}");
-                        }*/
+            // Check for minutes
+            if (timeSpan.Minutes > 0)
+            {
+                // Add minutes
+                pieceList.Add($"{timeSpan.Minutes} minute{(timeSpan.Minutes > 1 ? "s" : string.Empty)}");
+            }
+
+            // Check for seconds
+            if (timeSpan.Seconds > 0)
+            {
+                // Add seconds
+                pieceList.Add($"{timeSpan.Seconds} second{(timeSpan.Seconds > 1 ? "s" : string.Empty)}");
+            }
 
             return string.Join(", ", pieceList);
         }
@@ -657,6 +657,9 @@ namespace MultilingualWordCounter
         {
             // Set run at startup
             this.settingsData.RunAtStartup = this.runAtStartupToolStripMenuItem.Checked;
+
+            // Process registry action
+            this.ProcessRunAtStartupRegistry();
 
             // Set native language
             this.settingsData.NativeLanguage = this.nativeComboBox.SelectedItem.ToString();
