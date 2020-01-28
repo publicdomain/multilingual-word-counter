@@ -101,6 +101,9 @@ namespace MultilingualWordCounter
             // Set semantic version
             this.semanticVersion = this.assemblyVersion.Major + "." + this.assemblyVersion.Minor + "." + this.assemblyVersion.Build;
 
+            // TODO Set current directory [can be made conditional to: args[1] == "/autostart"]
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+
             /* Process languages */
 
             // Set languages file path

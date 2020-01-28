@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace MultilingualWordCounter
 {
+    using System.IO;
     // Directives
     using System.Threading;
 
