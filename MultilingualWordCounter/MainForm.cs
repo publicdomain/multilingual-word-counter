@@ -190,6 +190,12 @@ namespace MultilingualWordCounter
 
             // Set run at startup tool strip menu item check state
             this.runAtStartupToolStripMenuItem.Checked = this.settingsData.RunAtStartup;
+
+            // Set hide close button menu item check state
+            this.hideCloseButtonToolStripMenuItem.Checked = this.settingsData.HideCloseButton;
+
+            // Set form's control box visibility
+            this.ControlBox = !this.settingsData.HideCloseButton;
         }
 
         /// <summary>
@@ -527,6 +533,17 @@ namespace MultilingualWordCounter
         {
             // Toggle run at startup check box
             this.runAtStartupToolStripMenuItem.Checked = !this.runAtStartupToolStripMenuItem.Checked;
+
+            /* TODO Process hide close button [Can be separated to its own event handler function] */
+
+            // Toggle hide close button check box
+            this.hideCloseButtonToolStripMenuItem.Checked = !this.hideCloseButtonToolStripMenuItem.Checked;
+
+            // Set form's control box visibility
+            this.ControlBox = !this.hideCloseButtonToolStripMenuItem.Checked;
+
+            // Set control box visibility on settings data
+            this.settingsData.HideCloseButton = this.hideCloseButtonToolStripMenuItem.Checked;
         }
 
         /// <summary>

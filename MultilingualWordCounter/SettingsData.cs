@@ -22,10 +22,16 @@ namespace MultilingualWordCounter
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="T:MultilingualWordCounter.SettingsData"/> run at startup.
+        /// Gets or sets a value indicating whether this <see cref="T:MultilingualWordCounter.SettingsData"/> runs at startup.
         /// </summary>
         /// <value><c>true</c> if run at startup; otherwise, <c>false</c>.</value>
         public bool RunAtStartup { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="T:MultilingualWordCounter.SettingsData"/> hides the close button.
+        /// </summary>
+        /// <value><c>true</c> if hide close button; otherwise, <c>false</c>.</value>
+        public bool HideCloseButton { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the native language.

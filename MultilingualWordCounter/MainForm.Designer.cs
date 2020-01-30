@@ -58,6 +58,8 @@ namespace MultilingualWordCounter
         	this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
         	this.originalThreadDonationCodercomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+        	this.hotkeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
         	this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.minimizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.mainStatusStrip = new System.Windows.Forms.StatusStrip();
@@ -66,8 +68,7 @@ namespace MultilingualWordCounter
         	this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.notifyExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.mainNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-        	this.hotkeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        	this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+        	this.hideCloseButtonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.mainTableLayoutPanel.SuspendLayout();
         	this.mainMenuStrip.SuspendLayout();
         	this.mainStatusStrip.SuspendLayout();
@@ -208,7 +209,8 @@ namespace MultilingualWordCounter
         	// optionsToolStripMenuItem
         	// 
         	this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-        	        	        	this.runAtStartupToolStripMenuItem});
+        	        	        	this.runAtStartupToolStripMenuItem,
+        	        	        	this.hideCloseButtonToolStripMenuItem});
         	this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
         	this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
         	this.optionsToolStripMenuItem.Text = "&Options";
@@ -217,7 +219,7 @@ namespace MultilingualWordCounter
         	// runAtStartupToolStripMenuItem
         	// 
         	this.runAtStartupToolStripMenuItem.Name = "runAtStartupToolStripMenuItem";
-        	this.runAtStartupToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+        	this.runAtStartupToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
         	this.runAtStartupToolStripMenuItem.Text = "&Run at startup";
         	// 
         	// helpToolStripMenuItem
@@ -268,6 +270,18 @@ namespace MultilingualWordCounter
         	// 
         	this.toolStripSeparator5.Name = "toolStripSeparator5";
         	this.toolStripSeparator5.Size = new System.Drawing.Size(275, 6);
+        	// 
+        	// hotkeysToolStripMenuItem
+        	// 
+        	this.hotkeysToolStripMenuItem.Name = "hotkeysToolStripMenuItem";
+        	this.hotkeysToolStripMenuItem.Size = new System.Drawing.Size(278, 22);
+        	this.hotkeysToolStripMenuItem.Text = "&Hotkeys";
+        	this.hotkeysToolStripMenuItem.Click += new System.EventHandler(this.OnHotkeysToolStripMenuItemClick);
+        	// 
+        	// toolStripSeparator2
+        	// 
+        	this.toolStripSeparator2.Name = "toolStripSeparator2";
+        	this.toolStripSeparator2.Size = new System.Drawing.Size(275, 6);
         	// 
         	// aboutToolStripMenuItem
         	// 
@@ -328,17 +342,11 @@ namespace MultilingualWordCounter
         	this.mainNotifyIcon.Text = "Click to show Multilingual Word Counter";
         	this.mainNotifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnMainNotifyIconMouseClick);
         	// 
-        	// hotkeysToolStripMenuItem
+        	// hideCloseButtonToolStripMenuItem
         	// 
-        	this.hotkeysToolStripMenuItem.Name = "hotkeysToolStripMenuItem";
-        	this.hotkeysToolStripMenuItem.Size = new System.Drawing.Size(278, 22);
-        	this.hotkeysToolStripMenuItem.Text = "&Hotkeys";
-        	this.hotkeysToolStripMenuItem.Click += new System.EventHandler(this.OnHotkeysToolStripMenuItemClick);
-        	// 
-        	// toolStripSeparator2
-        	// 
-        	this.toolStripSeparator2.Name = "toolStripSeparator2";
-        	this.toolStripSeparator2.Size = new System.Drawing.Size(275, 6);
+        	this.hideCloseButtonToolStripMenuItem.Name = "hideCloseButtonToolStripMenuItem";
+        	this.hideCloseButtonToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+        	this.hideCloseButtonToolStripMenuItem.Text = "&Hide close button";
         	// 
         	// MainForm
         	// 
@@ -368,6 +376,7 @@ namespace MultilingualWordCounter
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.ToolStripMenuItem hideCloseButtonToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem hotkeysToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem minimizeToolStripMenuItem;
